@@ -15,16 +15,24 @@ import java.util.logging.Level;
 import de.iltisauge.databaseapi.Credential;
 import de.iltisauge.databaseapi.Database;
 import de.iltisauge.databaseapi.DatabaseAPI;
+import de.iltisauge.databaseapi.PrimaryKey;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
-@RequiredArgsConstructor
+@NoArgsConstructor
 public class MySQLDatabase implements Database {
 
 	@Getter
-	private final Credential credential;
+	@Setter
+	private Credential credential;
 	private Connection connection;
-	
+
+	public MySQLDatabase(Credential credential) {
+		this.credential = credential;
+	}
+
 	@Override
 	public boolean connect() {
 		try {
@@ -175,7 +183,7 @@ public class MySQLDatabase implements Database {
 	 * <b>Give a column name like this: columnName char(36)</b>
 	 */
 	public void createTable(String name, String... columns) {
-		createTable(name, "", columns);
+		createTable(name, new PrimaryKey(""), columns);
 	}
 	
 	/**
@@ -183,8 +191,8 @@ public class MySQLDatabase implements Database {
 	 * Creates a table if no table with the given name already exists.<br>
 	 * <b>Give a column name like this: columnName char(36)</b>
 	 */
-	public void createTable(String name, String primaryKey, String... columns) {
-		createTable(name, new String[] { primaryKey }, columns);
+	public void createTable(String name, PrimaryKey primaryKey, String... columns) {
+		createTable(name, new String[] { primaryKey.getValue() }, columns);
 	}
 	
 	/**
@@ -204,6 +212,6 @@ public class MySQLDatabase implements Database {
 				primaryKeyString += ((i == 0 ? "" : ", ") + ("`" + primaryKeys[i] + "`"));
 			}
 		}
-		execute("CREATE TABLE IF NOT EXISTS `" + name + "` (" + s + (primaryKeys == null ? "" : ", PRIMARY KEY(`" + primaryKeyString + "`)") + ";");
+		execute("CREATE TABLE IF NOT EXISTS `" + name + "` (" + s + (primaryKeys == null ? "" : ", PRIMARY KEY(" + primaryKeyString + ")") + ");");
 	}
 }

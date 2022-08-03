@@ -8,6 +8,8 @@ public interface Database {
 	 */
 	Credential getCredential();
 
+	void setCredential(Credential credential);
+
 	/**
 	 * Only connects to the database, if not already connected.
 	 * @return true, if a connection to the database could be created, otherwise false.

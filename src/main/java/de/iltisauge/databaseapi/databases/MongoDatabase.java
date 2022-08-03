@@ -1,26 +1,32 @@
 package de.iltisauge.databaseapi.databases;
 
-import java.util.Arrays;
-import java.util.logging.Level;
-
 import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
-
 import de.iltisauge.databaseapi.Credential;
 import de.iltisauge.databaseapi.Database;
 import de.iltisauge.databaseapi.DatabaseAPI;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
-@RequiredArgsConstructor
+import java.util.Arrays;
+import java.util.logging.Level;
+
+@NoArgsConstructor
 public class MongoDatabase implements Database {
 
 	@Getter
-	private final Credential credential;
+	@Setter
+	private Credential credential;
 	@Getter
 	private com.mongodb.client.MongoDatabase mongoDatabase;
 	private MongoClient mongoClient;
+
+	public MongoDatabase(Credential credential) {
+		this.credential = credential;
+	}
 	
 	@Override
 	public boolean connect() {
