@@ -36,7 +36,7 @@ public class MySQLDatabase implements Database {
 	@Override
 	public boolean connect() {
 		try {
-			connection = DriverManager.getConnection("jdbc:mysql://" + credential.getHostname() + ":" + credential.getPort() + "/" + credential.getDatabase(),
+			connection = DriverManager.getConnection("jdbc:mysql://" + credential.getHostname() + ":" + credential.getPort() + "/" + credential.getDatabase() + "?characterEncoding=utf8",
 					credential.getUsername(), credential.getPassword());
 		} catch (SQLException exception) {
 			DatabaseAPI.getLogger().log(Level.SEVERE, "Could not connect to database '" + credential.getDatabase() + "' on " +
